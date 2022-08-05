@@ -39,7 +39,7 @@ impl ArraySlice {
 
     pub fn new() -> Self{
         Self{
-            reg: Regex::new(r#"[^A-Za-z0-9_]?array_slice\(((?:[^\(\)]+|\((?1)\))*)\)"#).unwrap()
+            reg: Regex::new(r#"[^A-Za-z0-9_]{1}array_slice\(((?:[^\(\)]+|\((?1)\))*)\)"#).unwrap()
         }
     }
 

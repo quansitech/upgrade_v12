@@ -39,7 +39,7 @@ impl Implode {
 
     pub fn new() -> Self{
         Self{
-            reg: Regex::new(r#"[^A-Za-z0-9_]?implode\(((?:[^\(\)]+|\((?1)\))*)\)"#).unwrap()
+            reg: Regex::new(r#"[^A-Za-z0-9_>]{1}implode\(((?:[^\(\)]+|\((?1)\))*)\)"#).unwrap()
         }
     }
 
@@ -48,6 +48,7 @@ impl Implode {
         while self.reg.is_match(content_copy.as_bytes()).unwrap() {
             
             let caps = self.reg.captures(content_copy.as_bytes()).unwrap().unwrap();
+            println!("{:#?}", caps);
             let source = String::from_utf8(caps[0].to_vec()).unwrap();
             let group_1 = String::from_utf8(caps[1].to_vec()).unwrap();
 

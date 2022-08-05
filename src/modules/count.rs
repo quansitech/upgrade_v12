@@ -38,7 +38,7 @@ impl Count {
 
     pub fn new() -> Self{
         Count{
-            reg: Regex::new(r#"[^A-Za-z0-9_]?count\(([^(?:\(array\))])((?:[^\(\)]+|\((?2)\))*)\)"#).unwrap()
+            reg: Regex::new(r#"[^A-Za-z0-9_>]{1}count\(([^(?:\(array\))])((?:[^\(\)]+|\((?2)\))*)\)"#).unwrap()
         }
     }
 
