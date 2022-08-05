@@ -39,9 +39,9 @@ fn main() -> Result<(), String> {
 
     
 
-    let mut vec: Vec<String> = tools::visit_dirs(&path, &exclude_dir);
+    let vec: Vec<String> = tools::visit_dirs(&path, &exclude_dir);
 
-    vec = vec!("/mnt/www/move/demo.php".to_string());
+    //vec = vec!("/mnt/www/move/demo.php".to_string());
 
     let mut file_upgrade = FileUpgrade::new();
 

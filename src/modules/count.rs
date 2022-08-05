@@ -73,7 +73,7 @@ impl Count {
         if Regex::new(r#"['"]?(?i)distinct(?-i)\s*\(?[a-z0-9\.]+\)?['"]?"#).unwrap().is_match(match_str.as_bytes()).unwrap() {
             return false;
         }
-        if Regex::new(r#"^[a-z_]+$"#).unwrap().is_match(match_str.as_bytes()).unwrap() {
+        if Regex::new(r#"^[a-z_\.]+$"#).unwrap().is_match(match_str.as_bytes()).unwrap() {
             return false;
         }
         if Regex::new(r#"\s*\$[a-zA-z0-9_]+\s*=\s*[a-zA-z0-9_]+\s*"#).unwrap().is_match(match_str.as_bytes()).unwrap() {
