@@ -9,6 +9,7 @@ pub mod array_diff;
 pub mod array_filter;
 pub mod array_keys;
 pub mod array_intersect;
+pub mod in_array;
 
 pub trait Upgrade {
     fn view(&self, contents: &String) -> bool;

@@ -16,6 +16,7 @@ use crate::modules::array_diff::ArrayDiff;
 use crate::modules::array_filter::ArrayFilter;
 use crate::modules::array_keys::ArrayKeys;
 use crate::modules::array_intersect::ArrayIntersect;
+use crate::modules::in_array::InArray;
 use crate::file_handle::FileUpgrade;
 
 fn main() -> Result<(), String> {
@@ -41,7 +42,7 @@ fn main() -> Result<(), String> {
 
     let vec: Vec<String> = tools::visit_dirs(&path, &exclude_dir);
 
-    //vec = vec!("/mnt/www/move/demo.php".to_string());
+    // vec = vec!("/mnt/www/move/demo.php".to_string());
 
     let mut file_upgrade = FileUpgrade::new();
 
@@ -56,6 +57,8 @@ fn main() -> Result<(), String> {
     let array_filter = Box::new(ArrayFilter::new());
     let array_keys = Box::new(ArrayKeys::new());
     let array_intersect = Box::new(ArrayIntersect::new());
+    let in_array = Box::new(InArray::new());
+
 
     file_upgrade.register_upgrade_module(count);
     file_upgrade.register_upgrade_module(array_column);
@@ -68,6 +71,7 @@ fn main() -> Result<(), String> {
     file_upgrade.register_upgrade_module(array_filter);
     file_upgrade.register_upgrade_module(array_keys);
     file_upgrade.register_upgrade_module(array_intersect);
+    file_upgrade.register_upgrade_module(in_array);
 
     for index in 0..vec.len(){
         println!("正在处理文件: {}", vec[index]);
