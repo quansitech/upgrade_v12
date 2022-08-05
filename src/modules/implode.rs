@@ -48,7 +48,6 @@ impl Implode {
         while self.reg.is_match(content_copy.as_bytes()).unwrap() {
             
             let caps = self.reg.captures(content_copy.as_bytes()).unwrap().unwrap();
-            println!("{:#?}", caps);
             let source = String::from_utf8(caps[0].to_vec()).unwrap();
             let group_1 = String::from_utf8(caps[1].to_vec()).unwrap();
 
