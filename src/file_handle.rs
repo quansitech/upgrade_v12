@@ -26,7 +26,7 @@ impl<'a> FileUpgrade<'a>{
         self.upgrade_modules.push(upgrade_module);
     }
 
-    pub fn upgrade(&self) -> Result<(), String> {
+    pub fn upgrade(&mut self) -> Result<(), String> {
 
         let length = self.upgrade_modules.len();
         let mut file_upgrade_modules: Vec<usize> = (0..length).collect();

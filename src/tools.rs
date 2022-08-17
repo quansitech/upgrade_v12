@@ -181,8 +181,8 @@ pub fn find_n_param(str: &str, n: usize) -> String {
     result
 }
 
-pub fn replace_n_param<T>(str: &str, n: usize, replace_callback: T) -> String
-    where T: Fn(&str) -> String
+pub fn replace_n_param<T>(str: &str, n: usize, mut replace_callback: T) -> String
+    where T: FnMut(&str) -> String
 {
     let count = count_param(str);
     let mut param_vec: Vec<String> = Vec::new();

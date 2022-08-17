@@ -1,77 +1,36 @@
 use pcre2::bytes::Regex;
 
+use super::Module;
 use super::Upgrade;
-use crate::tools;
+use super::transform;
+use super::show_transform_result;
+use super::replace_transform_result;
 
 #[derive(Debug)]
 pub struct ArrayFilter{
-    reg: Regex
+    tracking_source: String,
+    tracking_param_str: String,
+    will_replace_params_index: Vec<usize>,
+    module: Module
 }
-
-impl Upgrade for ArrayFilter{
-    
-    fn view(&self, content: &String) -> bool {
-        match self.transform(content) {
-            Some(v) => {
-                println!("{}", v[0]);
-                println!("↓");
-                println!("{}", v[1]);
-                true
-            },
-            None => false
-        }
-    }
-
-    fn exec(&self, content: String) -> Result<String, String> {
-        match self.transform(&content) {
-            Some(v) => {
-                let new_content = content.replace(v[0].as_str(), v[1].as_str());
-                Ok(new_content)
-            },
-            None => Err("没有匹配项可处理".to_string())
-        }
-    }
-
-}
-
 
 impl ArrayFilter {
 
     pub fn new() -> Self{
         Self{
-            reg: Regex::new(r#"[^A-Za-z0-9_]{1}array_filter\(((?:[^\(\)]+|\((?1)\))*)\)"#).unwrap()
-        }
+            tracking_source: String::new(),
+            tracking_param_str: String::new(),
+            will_replace_params_index: Vec::new(),
+            module: Module{
+                reg: Regex::new(r#"[^A-Za-z0-9_]{1}array_filter\(((?:[^\(\)]+|\((?1)\))*)\)"#).unwrap(),
+                replace_params_index: Some(vec![1]),
+                exclude_params_index: None
+            }
+       }
     }
+    
 
-
-    fn transform(&self, content: &String) -> Option<Vec<String>> {
-        let mut content_copy = content.clone();
-        while self.reg.is_match(content_copy.as_bytes()).unwrap() {
-            
-            let caps = self.reg.captures(content_copy.as_bytes()).unwrap().unwrap();
-            let source = String::from_utf8(caps[0].to_vec()).unwrap();
-            let group_1 = String::from_utf8(caps[1].to_vec()).unwrap();
-
-            let param_1 = tools::find_n_param(group_1.as_str(), 1);
-
-            match self.parse_match(param_1.as_str()) {
-                true => {
-                    let new_params = tools::replace_n_param(group_1.as_str(), 1, |x| format!("(array)({})", x).to_string());
-
-                    let target = source.replace(group_1.as_str(), new_params.as_str());
-
-                    return Some(vec![source, target]);
-                },
-                false => {
-                    content_copy = content_copy.replace(source.as_str(), "");
-                }
-            };
-        }
-
-        None
-    }
-
-    fn parse_match(&self, match_str: &str) -> bool{
+    fn parse_match(match_str: &str) -> bool{
         if !match_str.trim_start().starts_with("(array)") {
             true
         }
@@ -81,3 +40,29 @@ impl ArrayFilter {
     }
 
 }
+
+impl Upgrade for ArrayFilter{
+    
+    fn view(&mut self, content: &String) -> bool {
+        match transform(&self.module, content, ArrayFilter::parse_match) {
+            Some(v) => {
+                self.tracking_source = v.0.0;
+                self.tracking_param_str = v.0.1;
+                self.will_replace_params_index = v.1;
+
+                show_transform_result(&self.tracking_source, &self.tracking_param_str, &self.will_replace_params_index);
+                true
+            },
+            None => false
+        }
+    }
+
+    fn exec(&self, content: String) -> Result<String, String> {
+
+        let result = replace_transform_result(content, &self.tracking_source, &self.tracking_param_str, &self.will_replace_params_index);
+        Ok(result)
+    }
+
+}
+
+

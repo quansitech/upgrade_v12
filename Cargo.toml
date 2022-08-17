@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 pcre2 = "0.2.3"
+colored = "2"
