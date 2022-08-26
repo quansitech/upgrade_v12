@@ -15,8 +15,6 @@ pub mod array_keys;
 pub mod array_intersect;
 pub mod in_array;
 pub mod array_chunk;
-pub mod array_pop;
-pub mod array_push;
 
 pub trait Upgrade {
 

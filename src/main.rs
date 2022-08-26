@@ -18,8 +18,6 @@ use crate::modules::array_keys::ArrayKeys;
 use crate::modules::array_intersect::ArrayIntersect;
 use crate::modules::in_array::InArray;
 use crate::modules::array_chunk::ArrayChunk;
-use crate::modules::array_pop::ArrayPop;
-use crate::modules::array_push::ArrayPush;
 use crate::file_handle::FileUpgrade;
 
 fn main() -> Result<(), String> {
@@ -41,8 +39,6 @@ fn main() -> Result<(), String> {
 
     let exclude_dir: Vec<&str> = tmp_exclude_dir.iter().map(|x| x.as_str()).collect();
 
-    
-
     let vec: Vec<String> = tools::visit_dirs(&path, &exclude_dir);
 
     //vec = vec!("/mnt/www/move/demo.php".to_string());
@@ -62,8 +58,6 @@ fn main() -> Result<(), String> {
     let array_intersect = Box::new(ArrayIntersect::new());
     let in_array = Box::new(InArray::new());
     let array_chunk = Box::new(ArrayChunk::new());
-    let array_pop = Box::new(ArrayPop::new());
-    let array_push = Box::new(ArrayPush::new());
 
 
     file_upgrade.register_upgrade_module(count);
@@ -79,8 +73,6 @@ fn main() -> Result<(), String> {
     file_upgrade.register_upgrade_module(array_intersect);
     file_upgrade.register_upgrade_module(in_array);
     file_upgrade.register_upgrade_module(array_chunk);
-    file_upgrade.register_upgrade_module(array_pop);
-    file_upgrade.register_upgrade_module(array_push);
 
     for index in 0..vec.len(){
         println!("正在处理文件: {}", vec[index]);
