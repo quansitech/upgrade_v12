@@ -54,7 +54,7 @@ fn transform<T>(module: &Module, content: &String, check_param: T) -> Option<((S
         }
         None => false
     } {
-
+        
         let param_count = tools::count_param(params_str.as_str());
         let mut can_replace_flag = false;
         let mut target_params_index: Vec<usize> = Vec::new();
@@ -68,6 +68,7 @@ fn transform<T>(module: &Module, content: &String, check_param: T) -> Option<((S
             }
 
             let param = tools::find_n_param(params_str.as_str(), i + 1);
+            
             if !check_param(param.as_str()) {
                 continue;
             }

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::io;
 use std::path::Path;
 use std::fs::{self, File};
-use std::io::{Read};
+use std::io::Read;
 
 pub fn input(msg : &str) -> String{
     println!("{}", msg);
@@ -55,9 +55,20 @@ pub fn read_config(config_path: &str) -> HashMap<String, String>{
 pub fn count_param(str: &str) -> usize {
     let mut count: usize = 0;
     let mut nest_count = 0;
-    let mut single_quote_count = 0;
-    let mut double_quote_count = 0;
+    let mut string_hole = false;
+    let mut hole_char = ' ';
+
     for c in str.chars() {
+        if string_hole && c == hole_char {
+            string_hole = false;
+            hole_char = ' ';
+            continue;
+        }
+
+        if string_hole {
+            continue;
+        }
+
         match c {
             '(' => {
                 nest_count += 1;
@@ -72,38 +83,17 @@ pub fn count_param(str: &str) -> usize {
                 nest_count -= 1;
             },
             '\'' => {
-                if single_quote_count > 0 {
-                    single_quote_count -= 1;
-                }
-                else {
-                    single_quote_count += 1;
-                }
-
-                if single_quote_count > 0 {
-                    nest_count += 1;
-                }
-                else{
-                    nest_count -= 1;
-                }
+                string_hole = true;
+                hole_char = '\'';
             },
             '"' => {
-                if double_quote_count > 0 {
-                    double_quote_count -= 1;
-                }
-                else {
-                    double_quote_count += 1;
-                }
-
-                if double_quote_count > 0 {
-                    nest_count += 1;
-                }
-                else{
-                    nest_count -= 1;
-                }
+                string_hole = true;
+                hole_char = '"';
             },
             ',' => {
                 if nest_count == 0 {
                     count += 1;
+                    
                 }
             },
             _ => {}
@@ -116,10 +106,22 @@ pub fn find_n_param(str: &str, n: usize) -> String {
     let mut result = String::new();
     let mut count = 0;
     let mut nest_count = 0;
-    let mut single_quote_count = 0;
-    let mut double_quote_count = 0;
+    let mut string_hole = false;
+    let mut hole_char = ' ';
+
     for c in str.chars() {
         result.push(c);
+
+        if string_hole && c == hole_char {
+            string_hole = false;
+            hole_char = ' ';
+            continue;
+        }
+
+        if string_hole {
+            continue;
+        }
+
         match c {
             '(' => {
                 nest_count += 1;
@@ -134,34 +136,12 @@ pub fn find_n_param(str: &str, n: usize) -> String {
                 nest_count -= 1;
             },
             '\'' => {
-                if single_quote_count > 0 {
-                    single_quote_count -= 1;
-                }
-                else {
-                    single_quote_count += 1;
-                }
-
-                if single_quote_count > 0 {
-                    nest_count += 1;
-                }
-                else{
-                    nest_count -= 1;
-                }
+                string_hole = true;
+                hole_char = '\'';
             },
             '"' => {
-                if double_quote_count > 0 {
-                    double_quote_count -= 1;
-                }
-                else {
-                    double_quote_count += 1;
-                }
-
-                if double_quote_count > 0 {
-                    nest_count += 1;
-                }
-                else{
-                    nest_count -= 1;
-                }
+                string_hole = true;
+                hole_char = '"';
             },
             ',' => {
                 if nest_count == 0 {

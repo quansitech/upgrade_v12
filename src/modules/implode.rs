@@ -31,6 +31,7 @@ impl Implode {
     
 
     fn parse_match(match_str: &str) -> bool{
+
         if !match_str.trim_start().starts_with("(array)") {
             true
         }
