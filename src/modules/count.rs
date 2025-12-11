@@ -31,6 +31,10 @@ impl Count {
     
 
     fn parse_match(match_str: &str) -> bool{
+        // 排除空参数情况，如 count() 或 function count()
+        if match_str.trim().is_empty() {
+            return false;
+        }
         if match_str.contains("case when") {
             return false;
         }
