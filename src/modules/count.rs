@@ -22,7 +22,7 @@ impl Count {
             tracking_param_str: String::new(),
             will_replace_params_index: Vec::new(),
             module: Module{
-                reg: Regex::new(r#"[^A-Za-z0-9_]{1}count\(((?:[^\(\)]+|\((?1)\))*)\)"#).unwrap(),
+                reg: Regex::new(r#"[^A-Za-z0-9_>:]{1}count\(((?:[^\(\)]+|\((?1)\))*)\)"#).unwrap(),
                 replace_params_index: Some(vec![1]),
                 exclude_params_index: None
             }
