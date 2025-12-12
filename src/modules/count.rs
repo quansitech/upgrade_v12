@@ -38,7 +38,10 @@ impl Count {
         if match_str.contains("case when") {
             return false;
         }
-        if Regex::new(r#"['"]?(?i)distinct(?-i)\s*\(?[a-z0-9\.]+\)?['"]?"#).unwrap().is_match(match_str.as_bytes()).unwrap() {
+        // 匹配两种情况：
+        // 1. DISTINCT field_name 或 DISTINCT(field) 这种简单形式
+        // 2. DISTINCT ' 或 DISTINCT " 这种 PHP 字符串拼接形式，如 DISTINCT ' . strtolower($var) . '_id'
+        if Regex::new(r#"['\"]?(?i)distinct(?-i)\s*(?:\(?[a-z0-9\.]+\)?|['\"])"#).unwrap().is_match(match_str.as_bytes()).unwrap() {
             return false;
         }
         if Regex::new(r#"^[a-z_\.]+$"#).unwrap().is_match(match_str.as_bytes()).unwrap() {
